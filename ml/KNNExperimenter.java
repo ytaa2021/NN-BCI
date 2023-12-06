@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javax.xml.crypto.Data;
 import ml.classifiers.Classifier;
 import ml.classifiers.KNNClassifier;
+import ml.classifiers.PerceptronClassifier;
 import ml.data.CrossValidationSet;
 import ml.data.DataSet;
 import ml.data.Example;
@@ -24,6 +25,7 @@ public class KNNExperimenter {
         Double eq = 0.0;
         classifier.train(train);
         for (Example example : test.getData()) {
+            System.out.println(example.getLabel()+"---"+classifier.classify(example));
             if (example.getLabel() == classifier.classify(example)) {
                 eq++;
             }
@@ -75,10 +77,12 @@ public class KNNExperimenter {
             
             
                 // run 30 times each, count the sum of accuracies 
-                for (int j = 0; j < 2; j++) {
+                for (int j = 0; j < 10; j++) {
                     // sum accuracy for average calculation
                     //perSum = perSum + calcAcc(trainData, testData, new AveragePerceptronClassifier());
                     KNNClassifier classifier = new KNNClassifier();
+                    //PerceptronClassifier classifier2 = new PerceptronClassifier();
+                    //classifier2.setIterations(50);
                     classifier.setK(w);
                     KNNSum = KNNSum + calcAcc(trainData, testData, classifier);
                 } 
@@ -86,7 +90,7 @@ public class KNNExperimenter {
                 // calculate average accuracies and add to results arraylist
                 //Double finalPerAcc = perSum/100;
                 //System.out.println(KNNSum);
-                Double finalKNNAcc = KNNSum/2;
+                Double finalKNNAcc = KNNSum/10;
                 //System.out.println("run accuracy: "+finalKNNAcc);
 
                 // add average accuracy to report for printing
