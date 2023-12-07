@@ -1,8 +1,8 @@
 import mne
 import numpy as np
 import pandas as pd
-raw1 = mne.io.read_raw_brainvision('data/train1/AA0005.vhdr', preload=True)
-raw2 = mne.io.read_raw_brainvision('data/train2/AA0007.vhdr', preload=True)
+raw1 = mne.io.read_raw_brainvision('raw_data/AA0005.vhdr', preload=True)
+raw2 = mne.io.read_raw_brainvision('raw_data/AA0007.vhdr', preload=True)
 
 # Define a dictionary with your channel names and the type 'eeg'
 channel_types = {name: 'eeg' for name in raw1.info['ch_names'] if 'acc' not in name}
@@ -25,11 +25,11 @@ raw1.notch_filter(freqs=notch_freq)
 raw2.notch_filter(freqs=notch_freq)
 
 
-labels_df = pd.read_csv('data/labels/eeg_labels_csv.csv')
+labels_df = pd.read_csv('eeg_labels_csv.csv')
 label_timestamps = list(labels_df.itertuples(index=False, name=None))
 #lets us pick the rate from the timestamps of how often examples happen
 base_timestamp = 0
-def label_data(raw, labels, rate=1):
+def label_data(raw, labels, rate=0.2):
     labeled_data = []
     current_label = 'N'
     label_idx = 0  # Index to keep track of which label we're on
@@ -72,4 +72,4 @@ out_df = pd.DataFrame(combined_data)
 out_df.set_index('timestamp', inplace=True)
 
 print(out_df)
-out_df.to_csv('labeled-data.csv')
+out_df.to_csv('labeled-data02.csv')
